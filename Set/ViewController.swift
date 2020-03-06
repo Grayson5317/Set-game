@@ -52,7 +52,6 @@ class ViewController: UIViewController {
         }
         
         return NSAttributedString.init(string: string, attributes: attributes)
-        
     }
     
     struct modelToView {
@@ -66,18 +65,14 @@ class ViewController: UIViewController {
     @IBAction func clickButton(_ sender: UIButton) {
         if set.isMatched {
             if isDeckEmpty() {
-                set.cardsOnTable[selectedButtonsIndex[0]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
-                set.cardsOnTable[selectedButtonsIndex[1]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
-                set.cardsOnTable[selectedButtonsIndex[2]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
+                selectedButtonsIndex.forEach() {set.cardsOnTable[$0] = Card(number: .zero, shape: .none, fill: .none, color: .none)}
                 setSelectedBtnEnable(to: false)
                 for index in selectedButtonsIndex {
                     cardButtons[index].layer.borderColor = UIColor.clear.cgColor
                 }
                 selectedButtonsIndex.removeAll()
             } else {
-                set.cardsOnTable[selectedButtonsIndex[0]] = set.draw1card()
-                set.cardsOnTable[selectedButtonsIndex[1]] = set.draw1card()
-                set.cardsOnTable[selectedButtonsIndex[2]] = set.draw1card()
+                selectedButtonsIndex.forEach() {set.cardsOnTable[$0] = set.draw1card()}
                 setSelectedBtnEnable(to: true)
             }
             updateViewFromModel()
@@ -96,9 +91,7 @@ class ViewController: UIViewController {
                 // can't click more than 3 cards
                 if selectedButtonsIndex.count > 2 {
                     setSelectedBtnEnable(to: true)
-                    for button in cardButtons {
-                        button.layer.borderColor = UIColor.clear.cgColor
-                    }
+                    cardButtons.forEach() { $0.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)}
                     selectedButtonsIndex.removeAll()
                 }
                 
@@ -130,10 +123,10 @@ class ViewController: UIViewController {
         set.isMatched = false
         set.resetSet()
         selectedButtonsIndex.removeAll()
-        for button in cardButtons {
-            button.setAttributedTitle(nil, for: .normal)
-            button.layer.borderColor = UIColor.clear.cgColor
-            button.isEnabled = true
+        cardButtons.forEach() {
+            $0.setAttributedTitle(nil, for: .normal)
+            $0.layer.borderColor = UIColor.clear.cgColor
+            $0.isEnabled = true
         }
         deal3MoreCardsButton.isEnabled = true
         updateViewFromModel()
@@ -144,14 +137,10 @@ class ViewController: UIViewController {
         if set.isMatched {
             setSelectedBtnBorderColor(to: UIColor.clear.cgColor)
             if isDeckEmpty() {
-                set.cardsOnTable[selectedButtonsIndex[0]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
-                set.cardsOnTable[selectedButtonsIndex[1]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
-                set.cardsOnTable[selectedButtonsIndex[2]] = Card(number: .zero, shape: .none, fill: .none, color: .none)
+                selectedButtonsIndex.forEach() {set.cardsOnTable[$0] = Card(number: .zero, shape: .none, fill: .none, color: .none)}
                 setSelectedBtnEnable(to: false)
             } else {
-                set.cardsOnTable[selectedButtonsIndex[0]] = set.draw1card()
-                set.cardsOnTable[selectedButtonsIndex[1]] = set.draw1card()
-                set.cardsOnTable[selectedButtonsIndex[2]] = set.draw1card()
+                selectedButtonsIndex.forEach() {set.cardsOnTable[$0] = set.draw1card()}
                 setSelectedBtnEnable(to: true)
             }
             updateViewFromModel()
@@ -194,15 +183,11 @@ class ViewController: UIViewController {
     }
     
     private func setSelectedBtnEnable(to isEnabled: Bool) {
-        cardButtons[selectedButtonsIndex[0]].isEnabled = isEnabled
-        cardButtons[selectedButtonsIndex[1]].isEnabled = isEnabled
-        cardButtons[selectedButtonsIndex[2]].isEnabled = isEnabled
+        selectedButtonsIndex.forEach() {cardButtons[$0].isEnabled = isEnabled}
     }
     
     private func setSelectedBtnBorderColor(to color: CGColor) {
-        cardButtons[selectedButtonsIndex[0]].layer.borderColor = color
-        cardButtons[selectedButtonsIndex[1]].layer.borderColor = color
-        cardButtons[selectedButtonsIndex[2]].layer.borderColor = color
+        selectedButtonsIndex.forEach() {cardButtons[$0].layer.borderColor = color}
     }
 }
 
